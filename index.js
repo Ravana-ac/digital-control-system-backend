@@ -1,8 +1,8 @@
 import { WebSocketServer } from 'ws'
 import express from 'express'
 import http from 'http'
-import { Server } from 'socket.io'
 import cors from 'cors'
+import { setValue, getValue } from './cache_db.js'
 
 const app = express()
 
@@ -11,8 +11,12 @@ app.use(cors())
 app.use(express.json())
 
 const server = http.createServer(app)
-
 const wss = new WebSocketServer({ server: server })
+
+const handleDeviceInput = (data) => {
+  const key = data.id
+  setValue(key, data)
+}
 
 wss.on('connection', (socket) => {
   console.log('Clent Connected')
@@ -20,7 +24,7 @@ wss.on('connection', (socket) => {
   socket.on('message', (message) => {
     try {
       const jsonData = JSON.parse(message)
-      console.log(jsonData)
+      handleDeviceInput(jsonData)
       socket.send('OK')
     } catch (error) {
       socket.send('Error')
