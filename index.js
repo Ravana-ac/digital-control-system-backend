@@ -21,6 +21,12 @@ app.post("/update", (req, res, next) => {
   res.send("OK");
 });
 
+app.post("/a0", (req, res, next) => {
+  console.log(req.body);
+  data.satCount++;
+  res.send("OK");
+});
+
 app.listen(5000, () => {
   console.log("server is listing on port 5000");
 });
