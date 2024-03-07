@@ -1,32 +1,43 @@
-import express from "express";
-import path from "path";
+import express from 'express'
+import http from 'http'
+import { Server } from 'socket.io'
+import cors from 'cors'
 
-const app = express();
+const app = express()
 
+app.use(cors())
 app.use(express.json())
+let socket = null
 
-const data = {
-  satCount: 0,
-};
+const server = http.createServer(app)
 
-app.set("view engine", "ejs");
+const io = new Server(server, {
+  cors: {
+    origin: 'http://localhost:5173',
+    methods: ['GET', 'POST'],
+  },
+})
 
-app.get("/", (req, res, next) => {
-  res.render("pages/index", data);
-});
+io.on('connection', (soc) => {
+  console.log(soc.id)
+  socket = soc
+})
 
-app.post("/update", (req, res, next) => {
-  console.log(req.body);
-  data.satCount++;
-  res.send("OK");
-});
+app.get('/', (req, res) => {
+  if (socket) {
+    socket.emit('receve_message', { message: 'hello' })
+  }
+  res.send('Train Location Tracker')
+})
 
-app.post("/a0", (req, res, next) => {
-  console.log(req.body);
-  data.satCount++;
-  res.send("OK");
-});
+app.post('/a0', (req, res, next) => {
+  console.log(req.body)
+  if (socket) {
+    socket.emit('receve_message', req.body)
+  }
+  res.send('OK')
+})
 
-app.listen(5000, () => {
-  console.log("server is listing on port 5000");
-});
+server.listen(5000, () => {
+  console.log('listening on localhost:5000')
+})
