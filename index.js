@@ -27,7 +27,7 @@ app.get('/', (req, res) => {
   if (socket) {
     socket.emit('receve_message', { message: 'hello' })
   }
-  res.send('Train Location Tracker')
+  res.send('<h1>Train Location Tracker</h1>')
 })
 
 app.post('/a0', (req, res, next) => {
