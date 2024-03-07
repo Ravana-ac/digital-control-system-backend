@@ -1,3 +1,4 @@
+import { WebSocketServer } from 'ws'
 import express from 'express'
 import http from 'http'
 import { Server } from 'socket.io'
@@ -5,37 +6,31 @@ import cors from 'cors'
 
 const app = express()
 
+app.set('view engine', 'ejs')
 app.use(cors())
 app.use(express.json())
-let socket = null
 
 const server = http.createServer(app)
 
-const io = new Server(server, {
-  cors: {
-    origin: 'http://localhost:5173',
-    methods: ['GET', 'POST'],
-  },
-})
+const wss = new WebSocketServer({ server: server })
 
-io.on('connection', (soc) => {
-  console.log(soc.id)
-  socket = soc
+wss.on('connection', (socket) => {
+  console.log('Clent Connected')
+
+  socket.on('message', (message) => {
+    try {
+      const jsonData = JSON.parse(message)
+      console.log(jsonData)
+      socket.send('OK')
+    } catch (error) {
+      socket.send('Error')
+      console.log(error)
+    }
+  })
 })
 
 app.get('/', (req, res) => {
-  if (socket) {
-    socket.emit('receve_message', { message: 'hello' })
-  }
-  res.send('<h1>Train Location Tracker</h1>')
-})
-
-app.post('/a0', (req, res, next) => {
-  console.log(req.body)
-  if (socket) {
-    socket.emit('receve_message', req.body)
-  }
-  res.send('OK')
+  res.render('pages/index')
 })
 
 server.listen(5000, () => {
