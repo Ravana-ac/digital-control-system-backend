@@ -5,6 +5,8 @@ import cors from 'cors'
 import { Server } from 'socket.io'
 import { setValue, getValue } from './cache_db.js'
 
+import 'dotenv/config.js'
+
 const app = express()
 
 app.set('view engine', 'ejs')
@@ -59,6 +61,6 @@ app.get('/', (req, res) => {
   res.render('pages/index')
 })
 
-server.listen(5000, () => {
-  console.log('listening on localhost:5000')
+server.listen(process.env.PORT, () => {
+  console.log(`listening on localhost:${process.env.PORT}`)
 })
