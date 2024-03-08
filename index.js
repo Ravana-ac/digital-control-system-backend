@@ -20,7 +20,6 @@ const wss = new WebSocketServer({
 })
 const io = new Server(server, {
   path: '/socket.io',
-  cors: { origin: 'http://localhost:5173' },
 })
 
 const handleDeviceInput = async (data) => {
