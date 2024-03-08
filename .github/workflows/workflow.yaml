@@ -29,16 +29,16 @@ jobs:
           echo $DOCKER_PASSWORD | docker login -u $DOCKER_USERNAME --password-stdin
           docker push kavindusanjula/train-tracker-backend
 
-  # update_ssh_linode:
-  #   name: Telling Linode Server to Update
-  #   needs: "push_to_registry"
-  #   runs-on: ubuntu-latest
-  #   steps:
-  #   - name: executing remote ssh commands using password
-  #     uses: appleboy/ssh-action@master
-  #     with:
-  #       host: ${{ secrets.HOST }}
-  #       username: ${{ secrets.USERNAME }}
-  #       password: ${{ secrets.PASSWORD }}
-  #       port: ${{ secrets.PORT }}
-  #       script: bash update.sh
+  update_server:
+    name: Telling Server to Update
+    needs: 'build'
+    runs-on: ubuntu-latest
+    steps:
+      - name: executing remote ssh commands using password
+        uses: appleboy/ssh-action@master
+        with:
+          host: ${{ secrets.HOST }}
+          username: ${{ secrets.USERNAME }}
+          password: ${{ secrets.PASSWORD }}
+          port: ${{ secrets.PORT }}
+          script: bash /opt/train-tracker/update.sh
