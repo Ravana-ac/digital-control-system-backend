@@ -5,18 +5,14 @@ const client = redis.createClient({
 })
 
 client.on('error', (err) => console.log('Redis Client Error', err))
+await client.connect()
 
 export const setValue = async (key, value) => {
-  await client.connect()
   await client.lPush(key, JSON.stringify(value))
   await client.expire(key, 20)
-  await client.quit()
 }
 
 export const getValue = async (key) => {
-  await client.connect()
   const element = await client.rPop(key)
-  await client.quit()
-
   return JSON.parse(element)
 }
