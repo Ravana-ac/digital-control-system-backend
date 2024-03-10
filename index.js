@@ -40,8 +40,9 @@ wss.on('connection', (socket) => {
   socket.on('message', async (message) => {
     try {
       const jsonData = JSON.parse(message)
+      console.log(message)
       await handleDeviceInput(jsonData)
-      socket.send('OK')
+      socket.send('Hello')
     } catch (error) {
       socket.send('Error')
       console.log(error)
