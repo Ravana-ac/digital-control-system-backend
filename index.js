@@ -29,6 +29,7 @@ const handleDeviceInput = async (data) => {
 }
 
 const handleLocationRequest = async (key, socket) => {
+  console.log('Reading data from cache db')
   const data = await getValue(key)
   console.log(data)
   socket.emit('receve-message', data)
@@ -40,7 +41,7 @@ wss.on('connection', (socket) => {
   socket.on('message', async (message) => {
     try {
       const jsonData = JSON.parse(message)
-      console.log(message)
+      console.log(jsonData)
       await handleDeviceInput(jsonData)
       socket.send('Hello')
     } catch (error) {
