@@ -20,7 +20,7 @@ const wss = new WebSocketServer({
 })
 const io = new Server(server, {
   path: '/socket.io',
-  cors: { origin: 'http://149.28.148.239:3000' },
+  cors: { origin: '*' },
 })
 
 const handleDeviceInput = async (data) => {
@@ -29,9 +29,7 @@ const handleDeviceInput = async (data) => {
 }
 
 const handleLocationRequest = async (key, socket) => {
-  console.log('Reading data from cache db')
   const data = await getValue(key)
-  console.log(data)
   socket.emit('receve-message', data)
 }
 
