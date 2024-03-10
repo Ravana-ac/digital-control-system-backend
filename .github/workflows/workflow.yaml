@@ -41,4 +41,4 @@ jobs:
           username: ${{ secrets.USERNAME }}
           password: ${{ secrets.PASSWORD }}
           port: ${{ secrets.PORT }}
-          script: bash /opt/train-tracker/update.sh
+          script: bash /opt/train-tracker/update-backend.sh
