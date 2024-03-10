@@ -20,7 +20,7 @@ const wss = new WebSocketServer({
 })
 const io = new Server(server, {
   path: '/socket.io',
-  cors: { origin: 'https://train-tracker-7e96d.web.app/' },
+  cors: { origin: 'http://149.28.148.239:3000' },
 })
 
 const handleDeviceInput = async (data) => {
