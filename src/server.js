@@ -1,19 +1,16 @@
-import { WebSocketServer } from 'ws'
-import express from 'express'
-import http from 'http'
-import cors from 'cors'
+import 'dotenv/config.js'
+import mongoose from 'mongoose'
 import { Server } from 'socket.io'
 import { setValue, getValue } from './cache_db.js'
+import { WebSocketServer } from 'ws'
+import http from 'http'
+import app from './app.js'
 
-import 'dotenv/config.js'
-
-const app = express()
-
-app.set('view engine', 'ejs')
-app.use(cors())
-app.use(express.json())
+const CONN_STR = process.env.MONGODB_CONN_STRING
+const PORT = process.env.PORT
 
 const server = http.createServer(app)
+
 const wss = new WebSocketServer({
   server: server,
   path: '/ws',
@@ -57,10 +54,9 @@ io.on('connection', async (socket) => {
   })
 })
 
-app.get('/', (req, res) => {
-  res.render('pages/index')
-})
-
-server.listen(process.env.PORT, () => {
-  console.log(`listening on localhost:${process.env.PORT}`)
+mongoose.connect(CONN_STR).then(() => {
+  console.log('Database Connection - OK')
+  server.listen(PORT, () => {
+    console.log('Server is listning on port:', PORT)
+  })
 })
