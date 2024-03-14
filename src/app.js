@@ -11,6 +11,7 @@ app.set('view engine', 'ejs')
 app.use(cors())
 app.use(express.json())
 
+app.use('/uploads', express.static('uploads'))
 app.use('/', homeRouter)
 app.use('/auth', authRouter)
 app.use('/train', trainRouter)
