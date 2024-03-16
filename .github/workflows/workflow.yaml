@@ -1,9 +1,9 @@
 name: Build and Push to Docker Hub
 
 on:
-  pull_request:
+  push:
     branches:
-      - main # Change this to your main branch name
+      - dev # Change this to your main branch name
 
 jobs:
   build:

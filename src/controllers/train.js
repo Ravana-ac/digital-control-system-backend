@@ -27,6 +27,7 @@ export const addTrain = async (req, res, next) => {
 }
 
 export const getAllTrains = async (req, res) => {
+  console.log('Retriving Trains')
   try {
     const trains = await Train.find({})
 
